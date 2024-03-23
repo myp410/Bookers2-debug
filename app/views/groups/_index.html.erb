@@ -1,6 +1,5 @@
 <table class="table">
   <thead>
-    <% groups.each do |group| %>
     <tr>
       <th colspan="1"></th>
       <th>グループ名</th>
@@ -9,6 +8,7 @@
       <th colspan="2"></th>
     </tr>
     <tr>
+      <% groups.each do |group| %>
       <td>
         <% if group.group_image.attached? %>
           <%= image_tag group.group_image, size: '50x50' %>
