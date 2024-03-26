@@ -1,24 +1,26 @@
-# README
+# Bookers
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+本の感想を投稿するサイトです。<br>
+読んだ本の感想をシェアすることができます。
 
-Things you may want to cover:
+![]URL
 
-* Ruby version
+#使用技術
 
-* System dependencies
+*Ruby 3.1.2p20
+*Ruby on Rails 6.1.7
 
-* Configuration
+#AWS構成図
 
-* Database creation
+#機能一覧
 
-* Database initialization
+*ユーザー登録、ログイン機能(devise)
+*投稿機能
+  *画像投稿
+*いいね機能
+*コメント機能
+*フォロー機能
+*グループ機能
+*検索機能
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#テスト
