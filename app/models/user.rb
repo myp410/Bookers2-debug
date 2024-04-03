@@ -13,13 +13,12 @@ class User < ApplicationRecord
   validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true
   validates :introduction, length: { maximum: 50 }
 
-  has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
-  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+  has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
+  has_many :passive_relationships, class_name: 'Relationship', foreign_key: 'followed_id', dependent: :destroy
   has_many :followings, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
 
   has_many :group_users, dependent: :destroy
-
 
   def follow(user)
     active_relationships.create(followed_id: user.id)
@@ -34,23 +33,33 @@ class User < ApplicationRecord
   end
 
   def get_profile_image
-    (profile_image.attached?) ? profile_image : 'no_image.jpg'
+    profile_image.attached? ? profile_image : 'no_image.jpg'
   end
 
   def self.looks(search, word)
-    if search == "perfect_match"
-      @user = User.where("name LIKE?", "#{word}")
-    elsif search == "forward_match"
-      @user = User.where("name LIKE?", "#{word}%")
-    elsif search == "backward_match"
-      @user = User.where("name LIKE?", "%#{word}")
-    elsif search == "partial_match"
-      @user = User.where("name LIKE?", "%#{word}%")
-    else
-      @user = User.all
-    end
+    @user = if search == 'perfect_match'
+              User.where('name LIKE?', "#{word}")
+            elsif search == 'forward_match'
+              User.where('name LIKE?', "#{word}%")
+            elsif search == 'backward_match'
+              User.where('name LIKE?', "%#{word}")
+            elsif search == 'partial_match'
+              User.where('name LIKE?', "%#{word}%")
+            else
+              User.all
+            end
   end
-
+  
+  GUEST_USER_EMAIL = "guest@example.com"
+  
+    def self.guest
+      find_or_create_by!(emaul: GUEST_USER_EMAIL) do |user|
+        user.password = SecureRandom.urlsafe_base64
+        user.name = "guestuser"
+      end
+    end
+    
+    def guest_user?
+      email == GUEST_USER_EMAIL
+    end  
 end
-
-

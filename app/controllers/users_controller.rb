@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :ensure_correct_user, only: [:edit, :update]
+  before_action :ensure_correct_user, only: %i[edit update]
+  before_action :ensure_guest_user, only: [:edit]
 
   def show
     @user = User.find(params[:id])
@@ -10,7 +11,7 @@ class UsersController < ApplicationController
   def index
     @users = User.all
     @book = Book.new
-  end  
+  end
 
   def edit
     @user = current_user
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update(user_params)
-      redirect_to user_path(@user), notice: "You have updated user successfully."
+      redirect_to user_path(@user), notice: 'You have updated user successfully.'
     else
       render :edit
     end
@@ -33,8 +34,15 @@ class UsersController < ApplicationController
 
   def ensure_correct_user
     @user = User.find(params[:id])
-    unless @user == current_user
-      redirect_to user_path(current_user)
-    end
+    return if @user == current_user
+
+    redirect_to user_path(current_user)
+  end
+  
+  def ensure_guest_user
+    @user = User.find(params[:id])
+    if @user.guest_user?
+      redirect_to user_path(current_user), notice: "ゲストユーザーはプロフィール編集画面へ遷移できません。"
+    end  
   end
 end
