@@ -18,17 +18,11 @@
   </tr>
 </table>
 　
+
 <div class='row'>
-  <% if current_user != user %>
-    <td><%= render "relationships/btn", user: user, options: { class: ""} %></td>
-  <% else %>  
-    <% unless user.guest_user? %>
-      <div class="row">
-        <%= link_to "", edit_user_path(user), class: "btn btn-outline-secondary btn-block fas fa-user-cog edit_user_#{user.id}" %>
-      </div>
-    <% else %>
-      <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block" do %>
-        <i class="fas fa-user-cog"></i>
-      <% end %>
+  <% if current_user == user && !user.guest_user? %>
+      <%= link_to "", edit_user_path(user), class: "btn btn-outline-secondary btn-block fas fa-user-cog edit_user_#{user.id}" %>
+  <% elsif !user.guest_user? %>  
+    <%= render "relationships/btn", user: user, options: { class: ""} %>
   <% end %>
 </div>
